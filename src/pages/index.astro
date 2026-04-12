@@ -33,16 +33,18 @@ import Layout from '../layouts/Layout.astro';
 
       <a
         id="test-link"
+        aria-label="create your qr code"
         href=""
         target="_blank"
         rel="noopener noreferrer"
-        class="text-center w-full md:w-4/12 py-1 px-8 m-auto mb-0 border rounded-lg dark:bg-green-600 dark:border-green-500 dark:text-white"
+        class="text-center w-full md:w-4/12 py-1 px-8 m-auto mb-0 border transition-all duration-200 ease-in-out rounded-lg dark:bg-green-600 dark:border-green-500 dark:text-white hover:dark:border-green-600 hover:dark:bg-green-700"
         >Test your link</a
       >
     </div>
     <button
       id="download"
-      class="hidden block max-md:w-full mb-4 py-1 px-8 m-auto border rounded-lg dark:bg-green-600 dark:border-green-500 dark:text-white"
+      aria-label="download your qr code"
+      class="hidden"
       >Download</button
     >
     <img id="qrcode" class="m-auto rounded-lg" />
@@ -80,11 +82,12 @@ import Layout from '../layouts/Layout.astro';
           qrCodeImg?.setAttribute('src', dataUrl);
         }
       );
-    } else {
+      return 
+    } 
+
       downloadButton?.classList.add('hidden');
       qrCodeImg?.setAttribute('alt', '');
       qrCodeImg?.setAttribute('src', '');
-    }
   }
 
   function handleInputChanges(event: Event) {
