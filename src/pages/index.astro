@@ -37,7 +37,7 @@ import Layout from '../layouts/Layout.astro';
         href=""
         target="_blank"
         rel="noopener noreferrer"
-        class="text-center w-full md:w-4/12 py-1 px-8 m-auto mb-0 border transition-all duration-200 ease-in-out rounded-lg dark:bg-green-600 dark:border-green-500 dark:text-white hover:dark:border-green-600 hover:dark:bg-green-700"
+        class="disabled hidden disabled:hidden disabled:cursor-none text-center w-full md:w-4/12 py-1 px-8 m-auto mb-0 border transition-all duration-200 ease-in-out rounded-lg dark:bg-green-600 dark:border-green-500 dark:text-white hover:dark:border-green-600 hover:dark:bg-green-700"
         >Test your link</a
       >
     </div>
@@ -53,6 +53,15 @@ import Layout from '../layouts/Layout.astro';
 <script>
   import QRCode from 'qrcode';
   import sanitizeFilename from 'sanitize-filename';
+
+  console.log(`
+    _   __      __              _           
+   / | / /___  / /_  ___  __  _( )_____    
+  /  |/ / __ \\/ __ \\/ _ \\/ / / /// ___/  
+ / /|  / /_/ / /_/ /  __/ /_/ / (__  )   
+/_/ |_/\\____/_.___/\\___/\\__, / /____/      
+                       /____/                                                                                                                                                                                                                                                                   
+  `)
 
   const debounce = (callback: Function, wait: number) => {
     let timeoutId: number | undefined = undefined;
@@ -92,6 +101,18 @@ import Layout from '../layouts/Layout.astro';
 
   function handleInputChanges(event: Event) {
     const text = (event?.target as HTMLInputElement).value;
+
+    const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+    const textIncludesLink = expression.test(text)
+
+    const testLinkButton = document.getElementById('test-link');
+
+    if (textIncludesLink) {
+            testLinkButton?.classList.remove('hidden');
+    } else {
+           testLinkButton?.classList.add('hidden');
+    } 
+    
     if ('URLSearchParams' in window) {
       const url = new URL(window.location.toString());
       url.searchParams.set('text', text);
@@ -100,7 +121,6 @@ import Layout from '../layouts/Layout.astro';
 
     updateQrcode(text);
 
-    const testLinkButton = document.getElementById('test-link');
     testLinkButton?.setAttribute('href', text);
   }
 
@@ -116,6 +136,7 @@ import Layout from '../layouts/Layout.astro';
     link.click();
     document.body.removeChild(link);
   }
+
 
   const textInput = document.getElementById('url');
 
